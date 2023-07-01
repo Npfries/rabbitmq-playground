@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  sender:
+    build:
+      context: ./apps/sender/
+    environment:
+      - RABBIT_MQ_HOST=amqp://rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      replicas: 1
+    
+  tasks1_receiver:
+    build:
+      context: ./apps/receiver/
+    environment:
+      - RABBIT_MQ_HOST=amqp://rabbitmq
+      - QUEUE_NAME=tasks1
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      replicas: 1
+  
+  tasks2_receiver:
+    build:
+      context: ./apps/receiver/
+    environment:
+      - RABBIT_MQ_HOST=amqp://rabbitmq
+      - QUEUE_NAME=tasks2
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      replicas: 1
+    
+  tasks3_receiver:
+    build:
+      context: ./apps/receiver/
+    environment:
+      - RABBIT_MQ_HOST=amqp://rabbitmq
+      - QUEUE_NAME=tasks3
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      replicas: 1
+
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    ports:
+      - 15672:15672
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 3s
+      timeout: 30s
+      retries: 3

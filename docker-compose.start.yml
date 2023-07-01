@@ -1,0 +1,16 @@
+services:
+  sender:
+    build:
+      target: start
+
+  tasks1_receiver:
+    build:
+      target: start
+
+  tasks2_receiver:
+    build:
+      target: start
+
+  tasks3_receiver:
+    build:
+      target: start
